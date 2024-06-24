@@ -147,28 +147,28 @@ module.exports = class UserController {
         const user = await getUserByToken(token)
 
         const { name, email, phone, password, confirmPassword } = req.body
-
-        let image = ''
-
-        // validations 
-        if(!name) {
-            res.status(422).json({message: "O nome é obrigatório"})
-            return
+    
+        if (req.file) {
+            user.image = req.file.filename
+        }
+    
+        // Validations 
+        if (!name) {
+            return res.status(422).json({ message: "O nome é obrigatório" })
         }
 
         user.name = name 
 
         if(!email) {
-            res.status(422).json({message: "O e-mail é obrigatório"})
-            return
+            return res.status(422).json({message: "O e-mail é obrigatório"})
+            
         }
 
         const userExist = await User.findOne({email: email})
 
         // check if email has already taken
         if(user.email !== email && userExist) {
-            res.status(422).json({message: "Por favor utilize outro e-mail!"})
-        return
+            return res.status(422).json({message: "Por favor utilize outro e-mail!"})
         }
 
         user.email = email
@@ -181,15 +181,10 @@ module.exports = class UserController {
         user.phone = phone
 
         // password validation
-        if(password !== confirmPassword) {
-            res
-                .status(422)
-                .json({
-                    message: "A senha e a confirmação de senha precisam ser iguais!"
-                })
-            return
-        } else if(password === confirmPassword && password != null) {
-            // create password
+        if (password !== confirmPassword) {
+            return res.status(422).json({ message: "A senha e a confirmação de senha precisam ser iguais!" })
+        } else if (password === confirmPassword && password != null) {
+            // Create password
             const salt = await bcrypt.genSalt(12)
             const passwordHash = await bcrypt.hash(password, salt)
 
@@ -204,14 +199,11 @@ module.exports = class UserController {
                 {new: true},
             )
 
-            res.status(200).json({message: "Usuário atualizado com sucesso"})
-
+            return res.status(200).json({ message: "Usuário atualizado com sucesso" })
+    
         } catch (e) {
-            res.status(500).json({message: e})
-            return
+            return res.status(500).json({ message: e.message })
         }
-
-        res.status(200).json({message: "Atualização do usuário feita!"})
-        return
     }
+    
 }
