@@ -9,7 +9,7 @@ const imageStorage = multer.diskStorage({
 
         if(req.baseUrl.includes("users")) {
             folder = "users"
-        } else if(req.baseUrl.includes("Upets")) {
+        } else if(req.baseUrl.includes("pets")) {
             folder = "pets"
         }
 
@@ -17,7 +17,7 @@ const imageStorage = multer.diskStorage({
 
     },
     filename: function(req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname))
+        cb(null, Date.now() + String(Math.floor(Math.random() * 100))  + path.extname(file.originalname))
     }
 })
 
