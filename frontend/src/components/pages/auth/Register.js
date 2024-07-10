@@ -9,7 +9,7 @@ import { Context } from "../../../context/UserContext"
 function Register() {
 
     const [user, setUser] = useState({})
-    const register = useContext(Context)
+    const {register} = useContext(Context)
 
     function handleChange(e) {
         setUser({...user, [e.target.name]: e.target.value})
