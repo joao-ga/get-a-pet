@@ -24,6 +24,7 @@ function PetForm({handleSubmit, petData, btnText}) {
     function submit(e) {
         e.preventDefault()
         console.log(pet)
+        console.log('Image URL:', `${process.env.REACT_APP_API}/images/pets/${pet.image[0]}`)
         handleSubmit(pet)
     }
 

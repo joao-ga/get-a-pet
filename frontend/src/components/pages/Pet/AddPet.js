@@ -15,9 +15,9 @@ function AddPet() {
        const formData = new FormData 
 
        await Object.keys(pet).forEach((key) =>{
-        if(key === 'images') {
+        if(key === 'image') {
             for(let i = 0; i < pet[key].length; i++) {
-                formData.append('images', pet[key][i])
+                formData.append('image', pet[key][i])
             }
         } else {
             formData.append(key, pet[key])
