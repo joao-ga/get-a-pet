@@ -25,7 +25,7 @@ function MyPets() {
     }, [token])
 
 
-    async function reomovePet(id) {
+    async function removePet(id) {
         let msgType = 'success'
 
         const data = await api.delete(`/pets/${id}`, {
@@ -46,6 +46,24 @@ function MyPets() {
         setFlashMessage(data.message, msgType)
     }
 
+    async function concludeAdoption(id) {
+
+        let msgType = 'success' 
+        const data = await api.patch(`pets/conclude/${id}`, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        }).then((response) => {
+            return response.data
+        }).catch((err) => {
+            msgType = 'error'
+            return err.response.data
+        })
+
+        setFlashMessage(data.message, msgType)
+        
+    }
+
     return(
         <section>
             <div className={styles.petslist_header}>
@@ -53,7 +71,7 @@ function MyPets() {
                 <Link to="/pet/add">Cadastrar Pet</Link>
             </div>
             <div className={styles.petslist_container}>
-                {pets.length > 0 &&                
+                {pets.length > 0 &&      
                     pets.map((pet)=>(                        
                         <div key={pet._id} className={styles.petlist_row}>
                             <RoundedImage 
@@ -66,12 +84,14 @@ function MyPets() {
                                 {pet.available ? (
                                     <>
                                         {pet.adopter && (
-                                            <button>Concluir adoção</button>
+                                            <button className={styles.conclude_btn} onClick={() =>{
+                                                concludeAdoption(pet._id)
+                                            }}>Concluir adoção</button>
                                         )}
                                         <Link to={`/pet/edit/${pet._id}`}>Editar</Link>
                                         <button onClick={() => {
-                                            reomovePet(pet._id)
-                                        }} className={styles.conclude_btn}>Excluir</button>
+                                            removePet(pet._id)
+                                        }} >Excluir</button>
                                     </>
                                 ) : (
                                     <p>Pet já adotado</p>
