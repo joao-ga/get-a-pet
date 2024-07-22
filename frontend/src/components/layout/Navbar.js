@@ -24,7 +24,10 @@ function Navbar() {
                 {authenticated ? (
                     <>
                         <li>
-                            <Link to={"/pet/myPets"}>Meus Pets</Link>
+                            <Link to={"/pet/myadoptions"}>Minhas Adoções</Link>
+                        </li>
+                        <li>
+                            <Link to={"/pet/mypets"}>Meus Pets</Link>
                         </li>
                         <li>
                             <Link to={"/user/profile"}>Perfil</Link>
